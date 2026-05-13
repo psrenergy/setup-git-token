@@ -1,0 +1,17 @@
+name: 'Setup Git Token Auth'
+description: 'Configures Git to use a Personal Access Token via environment variables'
+inputs:
+  token:
+    description: 'Personal Access Token (PAT) for GitHub authentication'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Inject Git config into environment
+      shell: bash
+      run: |
+        echo "GIT_CONFIG_COUNT=1" >> $GITHUB_ENV
+        echo "GIT_CONFIG_KEY_0=url.https://x-access-token:${{ inputs.token }}@github.com/.insteadOf" >> $GITHUB_ENV
+        echo "GIT_CONFIG_VALUE_0=https://github.com/" >> $GITHUB_ENV
+        echo "JULIA_PKG_USE_CLI_GIT=1" >> $GITHUB_ENV
